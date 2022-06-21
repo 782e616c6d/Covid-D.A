@@ -1,1 +1,5 @@
-Task
+Etl: Apache Spark.
+
+Data display: Google Data Studio.
+
+Design for academic purposes.
