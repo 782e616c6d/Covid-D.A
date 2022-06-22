@@ -21,8 +21,8 @@ Code: Matb10.
 import subprocess
 import os
 import sys
-import findspark
 
+import findspark
 findspark.init()
 
 import pyspark
