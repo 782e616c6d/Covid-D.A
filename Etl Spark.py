@@ -13,6 +13,9 @@ Code: Matb10.
 # Start SPARK SHELL with Python.
 # $SPARK_HOME/bin/pyspark
 
+# Submit .py to SPARK SHELL with Python Shell.
+# $SPARK_HOME/bin/spark-submit
+
 # Libraries to run operating system commands through Python.
 
 import subprocess
@@ -20,7 +23,7 @@ import os
 import sys
 import findspark
 
-findspark.init("/home/xiatsu/Spark")
+findspark.init()
 
 import pyspark
 
@@ -67,9 +70,8 @@ from pyspark.sql.session import SparkSession
 path = "/home/xiatsu/Process/2020_BR_Region_Mobility_Report.csv"
 
 df = spark.read.csv(path, inferSchema=True, header=True)
-df = df.drop(
-    "sub_region_1", "sub_region_2", "iso_3166_2_code", "census_fips_code", "place_id"
-)
+df = df.drop("sub_region_1", "sub_region_2", "iso_3166_2_code",
+             "census_fips_code", "place_id")
 df = df.selectExpr(
     "country_region_code as Code",
     "country_region as Country",
