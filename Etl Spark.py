@@ -4,15 +4,23 @@ Final Project :
 Discpline: Database Topics.
 Code: Matb10.
 """
+# Start the Master and workers.
+# $SPARK_HOME/sbin/start-all.sh
 
-# Libraries to run operating system commands through python.
+# Stop the Master and workers.
+# $SPARK_HOME/sbin/stop-all.sh
+
+# Start SPARK SHELL with Python.
+# $SPARK_HOME/bin/pyspark
+
+# Libraries to run operating system commands through Python.
 
 import subprocess
 import os
 import sys
 import findspark
 
-findspark.init("spark-3.3.0-bin-hadoop3")
+findspark.init("/home/xiatsu/Spark")
 
 import pyspark
 
@@ -24,6 +32,7 @@ if os.path.isfile("/home/xiatsu/Brute"):
 else:
     subprocess.run(["mkdir /home/xiatsu/Brute"])
 
+# First Step from ETL . Data Extract Process.
 # Download .zip Google. Save in '/home/xiatsu/Brute'.
 
 from urllib import request
@@ -49,7 +58,7 @@ z = ZipFile("/home/xiatsu/Brute", "r")
 z.extract("2020_BR_Region_Mobility_Report.csv", "/home/xiatsu/Process")
 z.close()
 
-# First step from ETL. Data extract, rename columns, and remove unseless information.
+# Second Step from ETL. Remove useless information, and formatting the data.
 
 from pyspark.sql import SQLContext
 from pyspark.context import SparkContext
@@ -85,6 +94,8 @@ if os.path.isfile("/home/xiatsu/Final"):
 else:
     subprocess.run(["mkdir /home/xiatsu/Final"])
 
+df = df.write.mode("overwrite").csv("/home/xiatsu/Final")
+
 # Show result.
 
-df.show()
+# df.show()
