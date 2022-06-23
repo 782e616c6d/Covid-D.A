@@ -70,6 +70,10 @@ Description: Location where the data, already processed, will be allocated.
 
 4 - Inside the Etl folder there are two scripts, the directories are different, but follow the same concept, that is, modify according to your use.
 
+5 -  Code Formatter: Yapf.
+
+6 -  For automation processes, the "cron" task scheduler can be used, in the case of Linux distributions.
+
 
 ![png-transparent-ubuntu-server-edition-long-term-support-installation-linux-linux-lamp-linux-ubuntu-16-removebg-preview](https://user-images.githubusercontent.com/76137086/175204618-59d2eb0b-4973-403e-9549-2956eaeaa177.png)
 
