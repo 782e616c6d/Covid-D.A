@@ -35,11 +35,25 @@ else:
     subprocess.run(["mkdir /home/usr/abc"])
 
 # First Step from ETL . Data Extract Process.
-# Download .zip Google. Save in '/home/usr/abc'.
+# Download .zip Google Community Mobility Reports. Save in '/home/usr/abc'.
 
 from urllib import request
 
 file_url = "https://www.gstatic.com/covid19/mobility/Region_Mobility_Report_CSVs.zip"
+file = "/home/usr/abc"
+
+request.urlretrieve(file_url, file)
+
+# Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/abc'.
+
+file_url = "Database/Fiocruz Database/Cases.csv"
+file = "/home/usr/abc"
+
+request.urlretrieve(file_url, file)
+
+# Download Cases.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/abc'..
+
+file_url = "Database/Fiocruz Database/Deaths.csv"
 file = "/home/usr/abc"
 
 request.urlretrieve(file_url, file)
