@@ -95,8 +95,10 @@ if os.path.isfile("/home/usr/ghi"):
 else:
     subprocess.run(["mkdir /home/usr/ghi"])
 
-df = df.write.mode("overwrite").csv("/home/usr/ghi")
+#  Exporting .csv with header.
 
-# Show result.
+df = df.write.option(header=True).csv("/home/usr/ghi")
+
+# Show result - Test.
 
 # df.show()
