@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-"""ETL Spark.py
-Final Project :
-Discpline: Database Topics.
-Code: Matb10.
-"""
+# ETL Spark.py
+# Final Project:
+# Discpline: Database Topics.
+# Code: Matb10.
+
 # Start the Master and workers.
 # $SPARK_HOME/sbin/start-all.sh
 
@@ -23,6 +22,7 @@ import os
 import sys
 
 import findspark
+
 findspark.init()
 
 import pyspark
