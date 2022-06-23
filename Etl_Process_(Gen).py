@@ -56,7 +56,7 @@ else:
 
 from zipfile import ZipFile
 
-z = ZipFile("/home/usr/Brute", "r")
+z = ZipFile("/home/usr/abc", "r")
 z.extract("2020_BR_Region_Mobility_Report.csv", "/home/usr/def")
 z.close()
 
