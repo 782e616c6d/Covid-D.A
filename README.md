@@ -56,6 +56,18 @@ Link: "Coming Soon".
 
 The ETL process was done through Apache Spark, but specifically with PySpark, and other awesome Python tools.
 
+Note:
+
+1 - "/home/usr/abc"
+Description: Location where raw data will be allocated.
+
+2 - "/home/usr/def"
+Description: Location where the data will remain, until the end of processing.
+
+3 - "/home/usr/ghi"
+Description: Location where the data, already processed, will be allocated.
+
+4 - Inside the Etl folder there are two scripts, the directories are different, but follow the same concept, that is, modify according to your use.
 
 ![images-removeb2)](https://user-images.githubusercontent.com/76137086/174941919-db3bd0a0-cc4b-44d1-8f09-66e1b1d0b325.png)
 
