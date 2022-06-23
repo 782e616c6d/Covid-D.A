@@ -97,7 +97,7 @@ else:
 
 #  Exporting .csv with header.
 
-df = df.write.option(header=True).csv("/home/usr/ghi")
+df = df.write.option("header", True).csv("/home/usr/ghi")
 
 # Show result - Test.
 
