@@ -91,3 +91,14 @@ Note: Hyper-V was used for this project, acting as a hypervisor, building a clus
 
 
 "Project for academic purposes, using Google and Fiocruz databases, to verify the relationship between the mobility of the Brazilian population, and the variation of cases and deaths".
+
+Data providers and maintainers:
+
+https://bigdata-covid19.icict.fiocruz.br/
+
+SIVEP-Gripe.
+
+eSUS-VE.
+
+Google LLC "Google COVID-19 Community Mobility Reports".
+https://www.google.com/covid19/mobility/ Accessed: <date>.
