@@ -16,6 +16,7 @@ Proceed with installing it.
 3 - If, like me, you chose the "Stand Alone" mode, follow the steps in the documentation.
 
 Doc. Link:
+
 https://spark.apache.org/docs/latest/spark-standalone.html
 
 4 - After installation, the cluster will be able to run and perform its proper functions, run your startup script "start-all.sh" and wait. (Access can be done via WebUi, or through the terminal, at your discretion).
@@ -28,7 +29,7 @@ https://spark.apache.org/docs/latest/spark-standalone.html
 ![0_Dnt6wUWlARdI1wim](https://user-images.githubusercontent.com/76137086/174943043-f9a2b98b-a2eb-41db-a167-9db342350dda.png)
 
 
-Link to databases
+Link to databases:
 
 1 - Community Mobility Reports (Br).
 Database: Google.
@@ -68,6 +69,23 @@ Description: Location where the data will remain, until the end of processing.
 Description: Location where the data, already processed, will be allocated.
 
 4 - Inside the Etl folder there are two scripts, the directories are different, but follow the same concept, that is, modify according to your use.
+
+
+![png-transparent-ubuntu-server-edition-long-term-support-installation-linux-linux-lamp-linux-ubuntu-16-removebg-preview](https://user-images.githubusercontent.com/76137086/175204618-59d2eb0b-4973-403e-9549-2956eaeaa177.png)
+
+
+Hardware Settings:
+
+1 - 2 CPU Cores.
+
+2 - 2 Gb Ram.
+
+3 - 10 Gb HD.
+
+4 - OS: Ubuntu Server 22.04.
+
+Note: Hyper-V was used for this project, acting as a hypervisor, building a cluster with 2 nodes, the configuration above is equivalent to a node.
+
 
 ![images-removeb2)](https://user-images.githubusercontent.com/76137086/174941919-db3bd0a0-cc4b-44d1-8f09-66e1b1d0b325.png)
 
