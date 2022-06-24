@@ -26,6 +26,8 @@ findspark.init()
 
 import pyspark
 
+# First Step from ETL . Data Extract Process.
+
 # Folder Creation (If necessary).
 
 if os.path.isfile("/home/usr/abc"):
@@ -34,7 +36,6 @@ if os.path.isfile("/home/usr/abc"):
 else:
     subprocess.run(["mkdir /home/usr/abc"])
 
-# First Step from ETL . Data Extract Process.
 # Download .zip Google Community Mobility Reports. Save in '/home/usr/abc'.
 
 from urllib import request
