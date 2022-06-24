@@ -60,7 +60,7 @@ file = "/home/usr/def"
 
 request.urlretrieve(file_url, file)
 
-# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'..
+# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'.
 
 file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Deaths.csv"
 file = "/home/usr/def"
