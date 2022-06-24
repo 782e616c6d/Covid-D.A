@@ -30,40 +30,40 @@ import pyspark
 
 # Folder Creation (If necessary).
 
-if os.path.isfile("/home/xiatsu/Brute"):
+if os.path.isdir("/home/xiatsu/Brute"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir /home/xiatsu/Brute"])
+    subprocess.run(["mkdir", "/home/xiatsu/Brute"])
 
 # Download .zip Google Community Mobility Reports. Save in '/home/xiatsu/Brute'.
 
 from urllib import request
 
 file_url = "https://www.gstatic.com/covid19/mobility/Region_Mobility_Report_CSVs.zip"
-file = "/home/xiatsu/Brute"
+file = "/home/xiatsu/Brute/Region_Mobility_Report_CSVs.zip"
 
 request.urlretrieve(file_url, file)
 
 # Folder Creation (If necessary).
 
-if os.path.isfile("/home/xiatsu/Process"):
+if os.path.isdir("/home/xiatsu/Process"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir /home/xiatsu/Process"])
+    subprocess.run(["mkdir", "/home/xiatsu/Process"])
 
 # Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/xiatsu/Process'.
 
-file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Cases.csv"
-file = "/home/xiatsu/Process"
+file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Cases.csv"
+file = "/home/xiatsu/Process/Cases.csv"
 
 request.urlretrieve(file_url, file)
 
 # Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/xiatsu/Process'.
 
-file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Deaths.csv"
-file = "/home/xiatsu/Process"
+file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Deaths.csv"
+file = "/home/xiatsu/Process/Deaths.csv"
 
 request.urlretrieve(file_url, file)
 
@@ -71,15 +71,21 @@ request.urlretrieve(file_url, file)
 
 from zipfile import ZipFile
 
-z = ZipFile("/home/xiatsu/Brute", "r")
+z = ZipFile("/home/xiatsu/Brute/Region_Mobility_Report_CSVs.zip", "r")
 z.extract("2020_BR_Region_Mobility_Report.csv", "/home/xiatsu/Process")
 z.close()
 
 # Second Step from ETL. Remove useless information, and formatting the data.
 
-from pyspark.sql import SQLContext
+from pyspark import SparkConf
 from pyspark.context import SparkContext
-from pyspark.sql.session import SparkSession
+from pyspark.sql import SparkSession, SQLContext
+
+# Create SparkSession
+
+# spark = SparkSession.builder.master("local").appName("Etl").getOrCreate()
+
+spark = SparkSession.builder.getOrCreate()
 
 path = "/home/xiatsu/Process/2020_BR_Region_Mobility_Report.csv"
 
@@ -92,8 +98,6 @@ df = df.selectExpr(
     "date as Date",
     "retail_and_recreation_percent_change_from_baseline as Retail_and_Recreation",
     "grocery_and_pharmacy_percent_change_from_baseline as Grocery_and_Pharmacy",
-)
-df = df.selectExpr(
     "parks_percent_change_from_baseline as Parks",
     "transit_stations_percent_change_from_baseline as Transit_Stations",
     "workplaces_percent_change_from_baseline as Workplaces",
@@ -104,15 +108,16 @@ df = df.selectExpr(
 
 # Folder Creation (If necessary).
 
-if os.path.isfile("/home/xiatsu/Final"):
+if os.path.isdir("/home/xiatsu/Final"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir /home/xiatsu/Final"])
+    subprocess.run(["mkdir", "/home/xiatsu/Final"])
 
 #  Exporting .csv with header.
 
-df = df.write.option("header", True).csv("/home/xiatsu/Final")
+df = df.write.option(
+    "header", True).mode('overwrite').csv("/home/xiatsu/Final/Mobility_Report.csv")
 
 # Show result - Test.
 
