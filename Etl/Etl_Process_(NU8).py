@@ -1,5 +1,4 @@
-# ETL Spark.py
-# Final Project:
+# Final Project.
 # Discpline: Database Topics.
 # Code: Matb10.
 
@@ -27,38 +26,53 @@ findspark.init()
 
 import pyspark
 
+# First Step from ETL. Data Extract Process.
+
 # Folder Creation (If necessary).
 
-if os.path.isfile("/home/xiatsu/Brute"):
+if os.path.isfile("/home/usr/abc"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir /home/xiatsu/Brute"])
+    subprocess.run(["mkdir /home/usr/abc"])
 
-# First Step from ETL . Data Extract Process.
-# Download .zip Google. Save in '/home/xiatsu/Brute'.
+# Download .zip Google Community Mobility Reports. Save in '/home/usr/abc'.
 
 from urllib import request
 
 file_url = "https://www.gstatic.com/covid19/mobility/Region_Mobility_Report_CSVs.zip"
-file = "/home/xiatsu/Brute"
+file = "/home/usr/abc"
 
 request.urlretrieve(file_url, file)
 
 # Folder Creation (If necessary).
 
-if os.path.isfile("/home/xiatsu/Process"):
+if os.path.isfile("/home/usr/def"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir /home/xiatsu/Process"])
+    subprocess.run(["mkdir /home/usr/def"])
 
-# Extract sub. file from '/home/xiatsu/Process'.
+# Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/def'.
+
+file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Cases.csv"
+file = "/home/usr/def"
+
+request.urlretrieve(file_url, file)
+
+# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'.
+
+file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Deaths.csv"
+file = "/home/usr/def"
+
+request.urlretrieve(file_url, file)
+
+# Extract sub. file from '/home/usr/def'.
 
 from zipfile import ZipFile
 
-z = ZipFile("/home/xiatsu/Brute", "r")
-z.extract("2020_BR_Region_Mobility_Report.csv", "/home/xiatsu/Process")
+z = ZipFile("/home/usr/abc", "r")
+z.extract("2020_BR_Region_Mobility_Report.csv", "/home/usr/def")
 z.close()
 
 # Second Step from ETL. Remove useless information, and formatting the data.
@@ -67,7 +81,7 @@ from pyspark.sql import SQLContext
 from pyspark.context import SparkContext
 from pyspark.sql.session import SparkSession
 
-path = "/home/xiatsu/Process/2020_BR_Region_Mobility_Report.csv"
+path = "/home/usr/def/2020_BR_Region_Mobility_Report.csv"
 
 df = spark.read.csv(path, inferSchema=True, header=True)
 df = df.drop("sub_region_1", "sub_region_2", "iso_3166_2_code",
@@ -90,14 +104,16 @@ df = df.selectExpr(
 
 # Folder Creation (If necessary).
 
-if os.path.isfile("/home/xiatsu/Final"):
+if os.path.isfile("/home/usr/ghi"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir /home/xiatsu/Final"])
+    subprocess.run(["mkdir /home/usr/ghi"])
 
-df = df.write.mode("overwrite").csv("/home/xiatsu/Final")
+#  Exporting .csv with header.
 
-# Show result.
+df = df.write.option("header", True).csv("/home/usr/ghi")
+
+# Show result - Test.
 
 # df.show()
