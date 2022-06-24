@@ -26,7 +26,7 @@ findspark.init()
 
 import pyspark
 
-# First Step from ETL . Data Extract Process.
+# First Step from ETL. Data Extract Process.
 
 # Folder Creation (If necessary).
 
