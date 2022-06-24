@@ -83,9 +83,12 @@ from pyspark.sql import SparkSession, SQLContext
 
 # Create SparkSession
 
-# spark = SparkSession.builder.master("local").appName("Etl").getOrCreate()
+spark = SparkSession.builder.master("local").appName("Etl.py").getOrCreate()
 
-spark = SparkSession.builder.getOrCreate()
+#or
+# spark = SparkSession.builder.getOrCreate()
+
+# Processing: Google Community Mobility Reports.
 
 path = "/home/usr/def/2020_BR_Region_Mobility_Report.csv"
 
@@ -103,6 +106,18 @@ df = df.selectExpr(
     "workplaces_percent_change_from_baseline as Workplaces",
     "residential_percent_change_from_baseline as Residential",
 )
+
+# Processing: Cases Reports.
+
+path1 = "/home/usr/def/Cases.csv"
+
+df1 = spark.read.csv(path1, inferSchema=True, header=True)
+
+# Processing: Deaths Reports.
+
+path2 = "/home/usr/def/Deaths.csv"
+
+df2 = spark.read.csv(path2, inferSchema=True, header=True)
 
 # Final Export
 
