@@ -52,14 +52,14 @@ if os.path.isfile("/home/usr/def"):
 else:
     subprocess.run(["mkdir /home/usr/def"])
 
-# Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/abc'.
+# Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/def'.
 
 file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Cases.csv"
 file = "/home/usr/def"
 
 request.urlretrieve(file_url, file)
 
-# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/abc'..
+# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'..
 
 file_url = "https://github.com/Xiatsus/Xiatsus-Task-Unit/blob/main/Database/Fiocruz%20Database/Deaths.csv"
 file = "/home/usr/def"
