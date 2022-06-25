@@ -14,6 +14,13 @@
 # Submit .py to SPARK SHELL with Python Shell.
 # $SPARK_HOME/bin/spark-submit
 
+# Download and install external Findspark and Pandas packages if needed.
+
+print("Download and installation of external packages Findspark and Pandas in progress, if the packages are installed this step will be automatically skipped.")
+
+ subprocess.run(["pip install", "findspark"])
+ subprocess.run(["pip install", "pandas"])
+
 # Libraries to run operating system commands through Python.
 
 import subprocess
@@ -30,6 +37,8 @@ import pandas as pd
 # First Step from ETL. Data Extract Process.
 
 # Folder Creation (If necessary).
+
+print("The directories, if they do not exist, will be created automatically.")
 
 if os.path.isdir("/home/xiatsu/Brute"):
     pass  # Nothing to do.
