@@ -25,6 +25,7 @@ import findspark
 findspark.init()
 
 import pyspark
+import pandas as pd
 
 # First Step from ETL. Data Extract Process.
 
@@ -37,6 +38,8 @@ else:
     subprocess.run(["mkdir", "/home/usr/abc"])
 
 # Download .zip Google Community Mobility Reports. Save in '/home/usr/abc'.
+
+print("Downloading Google Community Mobility Reports.")
 
 from urllib import request
 
@@ -55,12 +58,16 @@ else:
 
 # Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/def'.
 
+print("Downloading Cases Reports.")
+
 file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Cases.csv"
 file = "/home/usr/def/Cases.csv"
 
 request.urlretrieve(file_url, file)
 
 # Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'.
+
+print("Deaths Reports.")
 
 file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Deaths.csv"
 file = "/home/usr/def/Deaths.csv"
@@ -69,6 +76,8 @@ request.urlretrieve(file_url, file)
 
 # Extract sub. file from '/home/usr/def'.
 
+print("Extracting mobility reports referring to the Br community.")
+
 from zipfile import ZipFile
 
 z = ZipFile("/home/usr/abc/Region_Mobility_Report_CSVs.zip", "r")
@@ -76,6 +85,8 @@ z.extract("2020_BR_Region_Mobility_Report.csv", "/home/usr/def")
 z.close()
 
 # Second Step from ETL. Remove useless information, and formatting the data.
+
+print("Starting data processing.")
 
 from pyspark import SparkConf
 from pyspark.context import SparkContext
@@ -86,7 +97,16 @@ from pyspark.sql import SparkSession, SQLContext
 spark = SparkSession.builder.master("local").appName("Etl.py").getOrCreate()
 
 #or
+
 # spark = SparkSession.builder.getOrCreate()
+
+# Folder Creation (If necessary).
+
+if os.path.isdir("/home/usr/ghi"):
+    pass  # Nothing to do.
+
+else:
+    subprocess.run(["mkdir", "/home/usr/ghi"])
 
 # Processing: Google Community Mobility Reports.
 
@@ -107,33 +127,49 @@ df = df.selectExpr(
     "residential_percent_change_from_baseline as Residential",
 )
 
+# Exporting .csv.
+
+df = df.write.option(
+    "header", True).mode('overwrite').csv("/home/usr/ghi/Mobility_Report.csv")
+
+print("Google Community Mobility Reports has been processed, and saved in the directory /home/usr/ghi.")
+
 # Processing: Cases Reports.
 
 path1 = "/home/usr/def/Cases.csv"
 
-df1 = spark.read.csv(path1, inferSchema=True, header=True)
+df1 = pd.read_csv(path1, header=None, nrows=362, index_col=0)
+df1 = df1.transpose()
+df1.columns = ["Date", "Cases"]
+
+# Max = Line 362.
+
+# Exporting .csv.
+
+df1 = df1.to_csv("/home/usr/ghi/Cases.csv", header=True, index=False, index_label = False)
+
+print("Cases Reports has been processed, and saved in the directory /home/usr/ghi.")
 
 # Processing: Deaths Reports.
 
 path2 = "/home/usr/def/Deaths.csv"
 
-df2 = spark.read.csv(path2, inferSchema=True, header=True)
+df2 = pd.read_csv(path2, header=None, nrows=289, index_col=0, on_bad_lines='skip')
+df2 = df2.transpose()
+df2.columns = ["A", "B","C", "D", "E", "F", "G", "H"]
+df2 = df2.drop(columns=["C", "D", "E", "F", "G", "H"])
+df2.columns = ["Date", "Occurrences"]
 
-# Final Export
+# Max = Line 289.
 
-# Folder Creation (If necessary).
+# Exporting .csv.
 
-if os.path.isdir("/home/usr/ghi"):
-    pass  # Nothing to do.
+df2 = df2.to_csv("/home/usr/ghi/Deaths.csv", header=True, index=False, index_label = False)
 
-else:
-    subprocess.run(["mkdir", "/home/usr/ghi"])
+print("Deaths Reports has been processed, and saved in the directory /home/usr/ghi.")
 
-#  Exporting .csv with header.
+# Final export occurs at the end of processing each of the .Csv / Data Sources.
 
-df = df.write.option(
-    "header", True).mode('overwrite').csv("/home/usr/ghi/Mobility_Report.csv")
-
-# Show result - Test.
+# Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
 # df.show()
