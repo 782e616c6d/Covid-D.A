@@ -14,18 +14,26 @@
 # Submit .py to SPARK SHELL with Python Shell.
 # $SPARK_HOME/bin/spark-submit
 
-# Download and install external Findspark and Pandas packages if needed.
-
-print("Download and installation of external packages Findspark and Pandas in progress, if the packages are installed this step will be automatically skipped.")
-
- subprocess.run(["pip install", "findspark"])
- subprocess.run(["pip install", "pandas"])
-
 # Libraries to run operating system commands through Python.
+
+print("Importing libraries to run OS commands through Python.")
 
 import subprocess
 import os
 import sys
+
+# Download and install external Findspark and Pandas packages if needed.
+
+print(
+    "Download and installation of external packages Findspark and Pandas in progress, if the packages are installed this step will be automatically skipped."
+)
+
+subprocess.run(["pip", "install", "findspark"])
+subprocess.run(["pip", "install", "pandas"])
+
+# Findspark and Pandas libraries.
+
+print("Importing Findspark and Pandas.")
 
 import findspark
 
@@ -139,9 +147,12 @@ df = df.selectExpr(
 # Exporting .csv.
 
 df = df.write.option(
-    "header", True).mode('overwrite').csv("/home/xiatsu/Final/Mobility_Report.csv")
+    "header",
+    True).mode('overwrite').csv("/home/xiatsu/Final/Mobility_Report.csv")
 
-print("Google Community Mobility Reports has been processed, and saved in the directory /home/xiatsu/Final.")
+print(
+    "Google Community Mobility Reports has been processed, and saved in the directory /home/xiatsu/Final."
+)
 
 # Processing: Cases Reports.
 
@@ -155,17 +166,26 @@ df1.columns = ["Date", "Cases"]
 
 # Exporting .csv.
 
-df1 = df1.to_csv("/home/xiatsu/Final/Cases.csv", header=True, index=False, index_label = False)
+df1 = df1.to_csv("/home/xiatsu/Final/Cases.csv",
+                 header=True,
+                 index=False,
+                 index_label=False)
 
-print("Cases Reports has been processed, and saved in the directory /home/xiatsu/Final.")
+print(
+    "Cases Reports has been processed, and saved in the directory /home/xiatsu/Final."
+)
 
 # Processing: Deaths Reports.
 
 path2 = "/home/xiatsu/Process/Deaths.csv"
 
-df2 = pd.read_csv(path2, header=None, nrows=289, index_col=0, on_bad_lines='skip')
+df2 = pd.read_csv(path2,
+                  header=None,
+                  nrows=289,
+                  index_col=0,
+                  on_bad_lines='skip')
 df2 = df2.transpose()
-df2.columns = ["A", "B","C", "D", "E", "F", "G", "H"]
+df2.columns = ["A", "B", "C", "D", "E", "F", "G", "H"]
 df2 = df2.drop(columns=["C", "D", "E", "F", "G", "H"])
 df2.columns = ["Date", "Occurrences"]
 
@@ -173,9 +193,14 @@ df2.columns = ["Date", "Occurrences"]
 
 # Exporting .csv.
 
-df2 = df2.to_csv("/home/xiatsu/Final/Deaths.csv", header=True, index=False, index_label = False)
+df2 = df2.to_csv("/home/xiatsu/Final/Deaths.csv",
+                 header=True,
+                 index=False,
+                 index_label=False)
 
-print("Deaths Reports has been processed, and saved in the directory /home/xiatsu/Final.")
+print(
+    "Deaths Reports has been processed, and saved in the directory /home/xiatsu/Final."
+)
 
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
 
