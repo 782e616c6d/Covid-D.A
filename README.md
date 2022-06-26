@@ -59,22 +59,20 @@ The ETL process was done through Apache Spark, but specifically with PySpark, an
 
 Note:
 
-1 - "/home/usr/abc"
+1 - "/opt/Brute"
 Description: Location where raw data will be allocated.
 
-2 - "/home/usr/def"
+2 - "/opt/Processing"
 Description: Location where the data will remain, until the end of processing.
 
-3 - "/home/usr/ghi"
+3 - "/opt/Final"
 Description: Location where the data, already processed, will be allocated.
 
-4 - Inside the Etl folder there are two scripts, the directories are different, but follow the same concept, that is, modify according to your use.
+4 -  As you can see, "Cases.csv" and "Deaths.csv" were downloaded directly into the directory where the processing will take place, this is due to the fact that, as they are isolated datasets, they do not need to pass an initial filter, a necessary process to first base.
 
-5 -  As you can see, "Cases.csv" and "Deaths.csv" were downloaded directly into the directory where the processing will take place, this is due to the fact that, as they are isolated datasets, they do not need to pass an initial filter, a necessary process to first base.
+5 -  Code Formatter: Yapf.
 
-6 -  Code Formatter: Yapf.
-
-7 -  For automation processes, the "cron" task scheduler can be used, in the case of Linux distributions.
+6 -  For automation processes, the "cron" task scheduler can be used, in the case of Linux distributions.
 
 
 ![png-transparent-ubuntu-server-edition-long-term-support-installation-linux-linux-lamp-linux-ubuntu-16-removebg-preview](https://user-images.githubusercontent.com/76137086/175204618-59d2eb0b-4973-403e-9549-2956eaeaa177.png)
