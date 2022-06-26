@@ -102,4 +102,4 @@ SIVEP-Gripe.
 eSUS-VE.
 
 Google LLC "Google COVID-19 Community Mobility Reports".
-https://www.google.com/covid19/mobility/ Accessed: <date>.
+https://www.google.com/covid19/mobility/ Accessed: <12/06/2022>.
