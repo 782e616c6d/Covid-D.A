@@ -46,64 +46,62 @@ import pandas as pd
 
 # Folder Creation (If necessary).
 
-print("The directories, if they do not exist, will be created automatically.")
-
-if os.path.isdir("/home/usr/abc"):
+if os.path.isdir("/opt/Brute"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir", "/home/usr/abc"])
+    subprocess.run(["mkdir", "/opt/Brute"])
 
-# Download .zip Google Community Mobility Reports. Save in '/home/usr/abc'.
+# Download .zip Google Community Mobility Reports. Save in '/opt/Brute'.
 
-print("Downloading Google Community Mobility Reports.")
+print("Downloading Google Community Mobility Reports...")
 
 from urllib import request
 
 file_url = "https://www.gstatic.com/covid19/mobility/Region_Mobility_Report_CSVs.zip"
-file = "/home/usr/abc/Region_Mobility_Report_CSVs.zip"
+file = "/opt/Brute/Region_Mobility_Report_CSVs.zip"
 
 request.urlretrieve(file_url, file)
 
 # Folder Creation (If necessary).
 
-if os.path.isdir("/home/usr/def"):
+if os.path.isdir("/opt/Processing"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir", "/home/usr/def"])
+    subprocess.run(["mkdir", "/opt/Processing"])
 
-# Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/def'.
+# Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/opt/Processing'.
 
-print("Downloading Cases Reports.")
+print("Downloading Cases Reports...")
 
 file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Cases.csv"
-file = "/home/usr/def/Cases.csv"
+file = "/opt/Processing/Cases.csv"
 
 request.urlretrieve(file_url, file)
 
-# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'.
+# Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/opt/Processing'.
 
-print("Deaths Reports.")
+print("Downloading Death Reports...")
 
 file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Deaths.csv"
-file = "/home/usr/def/Deaths.csv"
+file = "/opt/Processing/Deaths.csv"
 
 request.urlretrieve(file_url, file)
 
-# Extract sub. file from '/home/usr/def'.
+# Extract sub. file from '/opt/Processing'.
 
 print("Extracting mobility reports referring to the Br community.")
 
 from zipfile import ZipFile
 
-z = ZipFile("/home/usr/abc/Region_Mobility_Report_CSVs.zip", "r")
-z.extract("2020_BR_Region_Mobility_Report.csv", "/home/usr/def")
+z = ZipFile("/opt/Brute/Region_Mobility_Report_CSVs.zip", "r")
+z.extract("2020_BR_Region_Mobility_Report.csv", "/opt/Processing")
 z.close()
 
 # Second Step from ETL. Remove useless information, and formatting the data.
 
-print("Starting data processing.")
+print("Starting data processing...")
 
 from pyspark import SparkConf
 from pyspark.context import SparkContext
@@ -119,7 +117,7 @@ spark = SparkSession.builder.master("local").appName("Etl.py").getOrCreate()
 
 # Processing: Google Community Mobility Reports.
 
-path = "/home/usr/def/2020_BR_Region_Mobility_Report.csv"
+path = "/opt/Processing/2020_BR_Region_Mobility_Report.csv"
 
 df = spark.read.csv(path, inferSchema=True, header=True)
 df = df.drop("sub_region_1", "sub_region_2", "iso_3166_2_code",
@@ -139,15 +137,15 @@ df = df.selectExpr(
 # Exporting .csv.
 
 df = df.write.option(
-    "header", True).mode('overwrite').csv("/home/usr/def/Mobility_Report.csv")
+    "header", True).mode('overwrite').csv("/opt/Processing/Mobility_Report.csv")
 
 print(
-    "Google Community Mobility Reports has been processed, and saved in the directory /home/usr/def."
+    "Google Community Mobility Reports has been processed, and saved in the directory /opt/Processing."
 )
 
 # Processing: Cases Reports.
 
-path1 = "/home/usr/def/Cases.csv"
+path1 = "/opt/Processing/Cases.csv"
 
 df1 = pd.read_csv(path1, header=None, nrows=362, index_col=0)
 df1 = df1.transpose()
@@ -157,18 +155,18 @@ df1.columns = ["Date", "Cases"]
 
 # Exporting .csv.
 
-df1 = df1.to_csv("/home/usr/def/Cases.csv",
+df1 = df1.to_csv("/opt/Processing/Cases.csv",
                  header=True,
                  index=False,
                  index_label=False)
 
 print(
-    "Cases Reports has been processed, and saved in the directory /home/usr/def."
+    "Cases Reports has been processed, and saved in the directory /opt/Processing."
 )
 
 # Processing: Deaths Reports.
 
-path2 = "/home/usr/def/Deaths.csv"
+path2 = "/opt/Processing/Deaths.csv"
 
 df2 = pd.read_csv(path2,
                   header=None,
@@ -184,30 +182,30 @@ df2.columns = ["Date", "Occurrences"]
 
 # Exporting .csv.
 
-df2 = df2.to_csv("/home/usr/def/Deaths.csv",
+df2 = df2.to_csv("/opt/Processing/Deaths.csv",
                  header=True,
                  index=False,
                  index_label=False)
 
 print(
-    "Deaths Reports has been processed, and saved in the directory /home/usr/def."
+    "Deaths Reports has been processed, and saved in the directory /opt/Processing."
 )
 
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
 
-print("Starting merging of .Csv Dataframes.")
+print("Starting merging of .Csv Dataframes...")
 
 # Folder Creation (If necessary).
 
-if os.path.isdir("/home/usr/ghi"):
+if os.path.isdir("/opt/Final"):
     pass  # Nothing to do.
 
 else:
-    subprocess.run(["mkdir", "/home/usr/ghi"])
+    subprocess.run(["mkdir", "/opt/Final"])
 
-path = "/home/usr/def/Mobility_Report.csv"
-path1 = "/home/usr/def/Cases.csv"
-path2 = "/home/usr/def/Deaths.csv"
+path = "/opt/Processing/Mobility_Report.csv"
+path1 = "/opt/Processing/Cases.csv"
+path2 = "/opt/Processing/Deaths.csv"
 
 df = spark.read.csv(path, inferSchema=True, header=True)
 df1 = spark.read.csv(path1, inferSchema=True, header=True)
@@ -216,20 +214,36 @@ df2 = spark.read.csv(path2, inferSchema=True, header=True)
 df3 = df1.join(df2, on=["Date"]).orderBy("Date")
 
 df3 = df3.coalesce(1).write.option(
-    "header", True).mode('overwrite').csv("/home/usr/def/Almost.csv")
+    "header", True).mode('overwrite').csv("/opt/Processing/Almost.csv")
 
-path3 = "/home/usr/def/Almost.csv"
+path3 = "/opt/Processing/Almost.csv"
 
 df4 = spark.read.csv(path3, inferSchema=True, header=True)
 
 df4 = df4.join(df, on=["Date"]).orderBy("Date")
 
 df4 = df4.coalesce(1).write.option(
-    "header", True).mode('overwrite').csv("/home/usr/ghi/Ready.csv")
+    "header", True).mode('overwrite').csv("/opt/Final/Ready.csv")
 
-print(
-    "The data has been saved and merged into a single file located at /home/usr/ghi/Ready.csv, for the analysis step, access your preferred BI tool."
-)
+# Last step.
+
+while True :
+	choice = input("Throughout the process directories were created, do you want to keep all of them? (Y/N).")
+	if choice == "Y" or choice == "y" or choice == "Yes" or choice == "yes":
+        subprocess.run(["rm", "-rf", "/opt/Processing/Almost.csv"])
+		print("All directories created will be kept, their location is (/opt/).\nThe data was processed, saved, and merged into a single file, located at (/opt/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data.")
+
+		break
+	elif choice == "N" or choice == "n" or choice == "No" or choice == "no":
+	    subprocess.run(["rm", "-rf", "/opt/Brute"])
+        subprocess.run(["rm", "-rf", "/opt/Processing"])
+		print("Only /opt/Final/Ready.csv will be kept.\nThe data was processed, saved, and merged into a single file, located at (/opt/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data.")
+
+		break
+	else:
+		print("Accepted entries are Y or N.")
+
+		pass
 
 # Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
