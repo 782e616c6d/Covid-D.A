@@ -147,10 +147,10 @@ df = df.selectExpr(
 # Exporting .csv.
 
 df = df.write.option(
-    "header", True).mode('overwrite').csv("/home/usr/ghi/Mobility_Report.csv")
+    "header", True).mode('overwrite').csv("/home/usr/def/Mobility_Report.csv")
 
 print(
-    "Google Community Mobility Reports has been processed, and saved in the directory /home/usr/ghi."
+    "Google Community Mobility Reports has been processed, and saved in the directory /home/usr/def."
 )
 
 # Processing: Cases Reports.
@@ -165,13 +165,13 @@ df1.columns = ["Date", "Cases"]
 
 # Exporting .csv.
 
-df1 = df1.to_csv("/home/usr/ghi/Cases.csv",
+df1 = df1.to_csv("/home/usr/def/Cases.csv",
                  header=True,
                  index=False,
                  index_label=False)
 
 print(
-    "Cases Reports has been processed, and saved in the directory /home/usr/ghi."
+    "Cases Reports has been processed, and saved in the directory /home/usr/def."
 )
 
 # Processing: Deaths Reports.
@@ -192,26 +192,45 @@ df2.columns = ["Date", "Occurrences"]
 
 # Exporting .csv.
 
-df2 = df2.to_csv("/home/usr/ghi/Deaths.csv",
+df2 = df2.to_csv("/home/usr/def/Deaths.csv",
                  header=True,
                  index=False,
                  index_label=False)
 
 print(
-    "Deaths Reports has been processed, and saved in the directory /home/usr/ghi."
+    "Deaths Reports has been processed, and saved in the directory /home/usr/def."
 )
 
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
 
+print("Starting merging of .Csv Dataframes.")
+
+path = "/home/usr/def/Mobility_Report.csv"
+path1 = "/home/usr/def/Cases.csv"
+path2 = "/home/usr/def/Deaths.csv"
+
+df = spark.read.csv(path, inferSchema=True, header=True)
+df1 = spark.read.csv(path1, inferSchema=True, header=True)
+df2 = spark.read.csv(path2, inferSchema=True, header=True)
+
+df3 = df1.join(df2, on=["Date"]).orderBy("Date")
+
+df3 = df3.coalesce(1).write.option(
+    "header", True).mode('overwrite').csv("/home/usr/def/Almost.csv")
+
+path3 = "/home/usr/def/Almost.csv"
+
+df4 = spark.read.csv(path3, inferSchema=True, header=True)
+
+df4 = df4.join(df, on=["Date"]).orderBy("Date")
+
+df4 = df4.coalesce(1).write.option(
+    "header", True).mode('overwrite').csv("/home/usr/ghi/Ready.csv")
+
 print(
-    "Starting merging of .Csv Dataframes."
+    "The data has been saved and merged into a single file located at /home/usr/ghi/Ready.csv, for the analysis step, access your preferred BI tool."
 )
 
-#  Merging Code.
-
-print(
-    "The data was saved and merged into a single file, for the analysis step, go to your preferred BI tool."
-)
 # Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
 # df.show()

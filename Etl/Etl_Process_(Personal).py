@@ -148,10 +148,10 @@ df = df.selectExpr(
 
 df = df.write.option(
     "header",
-    True).mode('overwrite').csv("/home/xiatsu/Final/Mobility_Report.csv")
+    True).mode('overwrite').csv("/home/xiatsu/Process/Mobility_Report.csv")
 
 print(
-    "Google Community Mobility Reports has been processed, and saved in the directory /home/xiatsu/Final."
+    "Google Community Mobility Reports has been processed, and saved in the directory /home/xiatsu/Process."
 )
 
 # Processing: Cases Reports.
@@ -166,13 +166,13 @@ df1.columns = ["Date", "Cases"]
 
 # Exporting .csv.
 
-df1 = df1.to_csv("/home/xiatsu/Final/Cases.csv",
+df1 = df1.to_csv("/home/xiatsu/Process/Cases.csv",
                  header=True,
                  index=False,
                  index_label=False)
 
 print(
-    "Cases Reports has been processed, and saved in the directory /home/xiatsu/Final."
+    "Cases Reports has been processed, and saved in the directory /home/xiatsu/Process."
 )
 
 # Processing: Deaths Reports.
@@ -193,16 +193,43 @@ df2.columns = ["Date", "Occurrences"]
 
 # Exporting .csv.
 
-df2 = df2.to_csv("/home/xiatsu/Final/Deaths.csv",
+df2 = df2.to_csv("/home/xiatsu/Process/Deaths.csv",
                  header=True,
                  index=False,
                  index_label=False)
-
 print(
-    "Deaths Reports has been processed, and saved in the directory /home/xiatsu/Final."
+    "Deaths Reports has been processed, and saved in the directory /home/xiatsu/Process."
 )
 
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
+
+print("Starting merging of .Csv Dataframes.")
+
+path = "/home/xiatsu/Process/Mobility_Report.csv"
+path1 = "/home/xiatsu/Process/Cases.csv"
+path2 = "/home/xiatsu/Process/Deaths.csv"
+
+df = spark.read.csv(path, inferSchema=True, header=True)
+df1 = spark.read.csv(path1, inferSchema=True, header=True)
+df2 = spark.read.csv(path2, inferSchema=True, header=True)
+
+df3 = df1.join(df2, on=["Date"]).orderBy("Date")
+
+df3 = df3.coalesce(1).write.option(
+    "header", True).mode('overwrite').csv("/home/xiatsu/Process/Almost.csv")
+
+path3 = "/home/xiatsu/Process/Almost.csv"
+
+df4 = spark.read.csv(path3, inferSchema=True, header=True)
+
+df4 = df4.join(df, on=["Date"]).orderBy("Date")
+
+df4 = df4.coalesce(1).write.option(
+    "header", True).mode('overwrite').csv("/home/xiatsu/Final/Ready.csv")
+
+print(
+    "The data has been saved and merged into a single file located at /home/xiatsu/Final/Ready.csv, for the analysis step, access your preferred BI tool."
+)
 
 # Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
