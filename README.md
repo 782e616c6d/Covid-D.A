@@ -1,7 +1,5 @@
 
 
-Final Project.
-
 Project for academic purposes.
 
 
