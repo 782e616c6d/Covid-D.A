@@ -7,7 +7,6 @@ Project for academic purposes.
 
 
 1 - Install Apache Spark dependencies.
-Proceed with installing it.
 
 2 - Install Apache Spark. (Im opted for the "Stand Alone Cluster" Mode, as it suited me, but feel free to check and suggest other simpler and more efficient installation modes).
 
