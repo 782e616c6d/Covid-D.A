@@ -137,7 +137,8 @@ df = df.selectExpr(
 # Exporting .csv.
 
 df = df.write.option(
-    "header", True).mode('overwrite').csv("/opt/Processing/Mobility_Report.csv")
+    "header",
+    True).mode('overwrite').csv("/opt/Processing/Mobility_Report.csv")
 
 print(
     "Google Community Mobility Reports has been processed, and saved in the directory /opt/Processing."
@@ -227,23 +228,31 @@ df4 = df4.coalesce(1).write.option(
 
 # Last step.
 
-while True :
-	choice = input("Throughout the process directories were created, do you want to keep all of them? (Y/N).")
-	if choice == "Y" or choice == "y" or choice == "Yes" or choice == "yes":
+while True:
+    choice = input(
+        "Throughout the process directories were created, do you want to keep all of them? (Y/N)."
+    )
+
+    if choice == "Y" or choice == "y" or choice == "Yes" or choice == "yes":
         subprocess.run(["rm", "-rf", "/opt/Processing/Almost.csv"])
-		print("All directories created will be kept, their location is (/opt/).\nThe data was processed, saved, and merged into a single file, located at (/opt/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data.")
+        print(
+            "All directories created will be kept, their location is (/opt/).\nThe data was processed, saved, and merged into a single file, located at (/opt/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data."
+        )
 
-		break
-	elif choice == "N" or choice == "n" or choice == "No" or choice == "no":
-	    subprocess.run(["rm", "-rf", "/opt/Brute"])
+        break
+
+    elif choice == "N" or choice == "n" or choice == "No" or choice == "no":
+        subprocess.run(["rm", "-rf", "/opt/Brute"])
         subprocess.run(["rm", "-rf", "/opt/Processing"])
-		print("Only /opt/Final/Ready.csv will be kept.\nThe data was processed, saved, and merged into a single file, located at (/opt/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data.")
+        print(
+            "Only /opt/Final/Ready.csv will be kept.\nThe data was processed, saved, and merged into a single file, located at (/opt/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data."
+        )
 
-		break
-	else:
-		print("Accepted entries are Y or N.")
+        break
+    else:
+        print("Accepted entries are Y or N.")
 
-		pass
+        pass
 
 # Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
