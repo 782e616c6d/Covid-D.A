@@ -117,14 +117,6 @@ spark = SparkSession.builder.master("local").appName("Etl.py").getOrCreate()
 
 # spark = SparkSession.builder.getOrCreate()
 
-# Folder Creation (If necessary).
-
-if os.path.isdir("/home/usr/ghi"):
-    pass  # Nothing to do.
-
-else:
-    subprocess.run(["mkdir", "/home/usr/ghi"])
-
 # Processing: Google Community Mobility Reports.
 
 path = "/home/usr/def/2020_BR_Region_Mobility_Report.csv"
@@ -204,6 +196,14 @@ print(
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
 
 print("Starting merging of .Csv Dataframes.")
+
+# Folder Creation (If necessary).
+
+if os.path.isdir("/home/usr/ghi"):
+    pass  # Nothing to do.
+
+else:
+    subprocess.run(["mkdir", "/home/usr/ghi"])
 
 path = "/home/usr/def/Mobility_Report.csv"
 path1 = "/home/usr/def/Cases.csv"
