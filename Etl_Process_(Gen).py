@@ -203,6 +203,15 @@ print(
 
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
 
+print(
+    "Starting merging of .Csv Dataframes."
+)
+
+# Merging Code.
+
+print(
+    "The data was saved and merged into a single file, for the analysis step, go to your preferred BI tool."
+)
 # Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
 # df.show()
