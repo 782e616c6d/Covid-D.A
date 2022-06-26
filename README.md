@@ -57,13 +57,13 @@ The ETL process was done through Apache Spark, but specifically with PySpark, an
 
 Note:
 
-1 - "/opt/Brute"
+1 - "/Brute"
 Description: Location where raw data will be allocated.
 
-2 - "/opt/Processing"
+2 - "/Processing"
 Description: Location where the data will remain, until the end of processing.
 
-3 - "/opt/Final"
+3 - "/Final"
 Description: Location where the data, already processed, will be allocated.
 
 4 -  As you can see, "Cases.csv" and "Deaths.csv" were downloaded directly into the directory where the processing will take place, this is due to the fact that, as they are isolated datasets, they do not need to pass an initial filter, a necessary process to first base.
