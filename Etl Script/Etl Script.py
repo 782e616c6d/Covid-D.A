@@ -236,7 +236,7 @@ while True:
     if choice == "Y" or choice == "y" or choice == "Yes" or choice == "yes":
         subprocess.run(["rm", "-rf", "Processing/Almost.csv"])
         print(
-            "All directories created will be kept, their location is ().\nThe data was processed, saved, and merged into a single file, located at (Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data."
+            "All directories created will be kept.\nThe data was processed, saved, and merged into a single file, located at (/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data."
         )
 
         break
@@ -245,7 +245,7 @@ while True:
         subprocess.run(["rm", "-rf", "Brute"])
         subprocess.run(["rm", "-rf", "Processing"])
         print(
-            "Only Final/Ready.csv will be kept.\nThe data was processed, saved, and merged into a single file, located at (Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data."
+            "Only Final/Ready.csv will be kept.\nThe data was processed, saved, and merged into a single file, located at (/Final/Ready.csv), for the analysis step, access your preferred BI tool, and import the data."
         )
 
         break
