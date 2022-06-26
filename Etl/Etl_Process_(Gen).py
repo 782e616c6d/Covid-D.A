@@ -12,13 +12,28 @@
 # $SPARK_HOME/bin/pyspark
 
 # Submit .py to SPARK SHELL with Python Shell.
-# $SPARK_HOME/bin/spark-submit
+# $SPARK_HOME/bin/spark-
 
-# Libraries to run operating system commands through Python.
+#  Libraries to run operating system commands through Python.
+
+print("Importing libraries to run OS commands through Python.")
 
 import subprocess
 import os
 import sys
+
+# Download and install external Findspark and Pandas packages if needed.
+
+print(
+    "Download and installation of external packages Findspark and Pandas in progress, if the packages are installed this step will be automatically skipped."
+)
+
+subprocess.run(["pip", "install", "findspark"])
+subprocess.run(["pip", "install", "pandas"])
+
+# Findspark and Pandas libraries.
+
+print("Importing Findspark and Pandas.")
 
 import findspark
 
@@ -31,6 +46,8 @@ import pandas as pd
 
 # Folder Creation (If necessary).
 
+print("The directories, if they do not exist, will be created automatically.")
+
 if os.path.isdir("/home/usr/abc"):
     pass  # Nothing to do.
 
@@ -38,6 +55,8 @@ else:
     subprocess.run(["mkdir", "/home/usr/abc"])
 
 # Download .zip Google Community Mobility Reports. Save in '/home/usr/abc'.
+
+print("Downloading Google Community Mobility Reports.")
 
 from urllib import request
 
@@ -56,12 +75,16 @@ else:
 
 # Download Cases.csv from the Fiocruz/eSUS-VE database. Save in '/home/usr/def'.
 
+print("Downloading Cases Reports.")
+
 file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Cases.csv"
 file = "/home/usr/def/Cases.csv"
 
 request.urlretrieve(file_url, file)
 
 # Download Deaths.csv from the Fiocruz/SIVEP-Gripe database. Save in '/home/usr/def'.
+
+print("Deaths Reports.")
 
 file_url = "https://raw.githubusercontent.com/Xiatsus/Xiatsus-Task-Unit/main/Database/Fiocruz%20Database/Deaths.csv"
 file = "/home/usr/def/Deaths.csv"
@@ -70,6 +93,8 @@ request.urlretrieve(file_url, file)
 
 # Extract sub. file from '/home/usr/def'.
 
+print("Extracting mobility reports referring to the Br community.")
+
 from zipfile import ZipFile
 
 z = ZipFile("/home/usr/abc/Region_Mobility_Report_CSVs.zip", "r")
@@ -77,6 +102,8 @@ z.extract("2020_BR_Region_Mobility_Report.csv", "/home/usr/def")
 z.close()
 
 # Second Step from ETL. Remove useless information, and formatting the data.
+
+print("Starting data processing.")
 
 from pyspark import SparkConf
 from pyspark.context import SparkContext
@@ -120,9 +147,11 @@ df = df.selectExpr(
 # Exporting .csv.
 
 df = df.write.option(
-    "header", True).mode('overwrite').csv("/home/usr/ghi/Mobility_Report.csv")
+    "header", True).mode('overwrite').csv("/home/usr/def/Mobility_Report.csv")
 
-print("Google Community Mobility Reports has been processed, and saved in the directory /home/usr/ghi.")
+print(
+    "Google Community Mobility Reports has been processed, and saved in the directory /home/usr/def."
+)
 
 # Processing: Cases Reports.
 
@@ -136,17 +165,26 @@ df1.columns = ["Date", "Cases"]
 
 # Exporting .csv.
 
-df1 = df1.to_csv("/home/usr/ghi/Cases.csv", header=True, index=False, index_label = False)
+df1 = df1.to_csv("/home/usr/def/Cases.csv",
+                 header=True,
+                 index=False,
+                 index_label=False)
 
-print("Cases Reports has been processed, and saved in the directory /home/usr/ghi.")
+print(
+    "Cases Reports has been processed, and saved in the directory /home/usr/def."
+)
 
 # Processing: Deaths Reports.
 
 path2 = "/home/usr/def/Deaths.csv"
 
-df2 = pd.read_csv(path2, header=None, nrows=289, index_col=0, on_bad_lines='skip')
+df2 = pd.read_csv(path2,
+                  header=None,
+                  nrows=289,
+                  index_col=0,
+                  on_bad_lines='skip')
 df2 = df2.transpose()
-df2.columns = ["A", "B","C", "D", "E", "F", "G", "H"]
+df2.columns = ["A", "B", "C", "D", "E", "F", "G", "H"]
 df2 = df2.drop(columns=["C", "D", "E", "F", "G", "H"])
 df2.columns = ["Date", "Occurrences"]
 
@@ -154,11 +192,44 @@ df2.columns = ["Date", "Occurrences"]
 
 # Exporting .csv.
 
-df2 = df2.to_csv("/home/usr/ghi/Deaths.csv", header=True, index=False, index_label = False)
+df2 = df2.to_csv("/home/usr/def/Deaths.csv",
+                 header=True,
+                 index=False,
+                 index_label=False)
 
-print("Deaths Reports has been processed, and saved in the directory /home/usr/ghi.")
+print(
+    "Deaths Reports has been processed, and saved in the directory /home/usr/def."
+)
 
 # Final export occurs at the end of processing each of the .Csv / Data Sources.
+
+print("Starting merging of .Csv Dataframes.")
+
+path = "/home/usr/def/Mobility_Report.csv"
+path1 = "/home/usr/def/Cases.csv"
+path2 = "/home/usr/def/Deaths.csv"
+
+df = spark.read.csv(path, inferSchema=True, header=True)
+df1 = spark.read.csv(path1, inferSchema=True, header=True)
+df2 = spark.read.csv(path2, inferSchema=True, header=True)
+
+df3 = df1.join(df2, on=["Date"]).orderBy("Date")
+
+df3 = df3.coalesce(1).write.option(
+    "header", True).mode('overwrite').csv("/home/usr/def/Almost.csv")
+
+path3 = "/home/usr/def/Almost.csv"
+
+df4 = spark.read.csv(path3, inferSchema=True, header=True)
+
+df4 = df4.join(df, on=["Date"]).orderBy("Date")
+
+df4 = df4.coalesce(1).write.option(
+    "header", True).mode('overwrite').csv("/home/usr/ghi/Ready.csv")
+
+print(
+    "The data has been saved and merged into a single file located at /home/usr/ghi/Ready.csv, for the analysis step, access your preferred BI tool."
+)
 
 # Show result. It can be used for testing purposes in any part of the operation with Dataframes:
 
