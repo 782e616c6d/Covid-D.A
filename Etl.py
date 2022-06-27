@@ -12,7 +12,7 @@
 # $SPARK_HOME/bin/pyspark
 
 # Submit .py to SPARK SHELL with Python Shell.
-# $SPARK_HOME/bin/spark-
+# $SPARK_HOME/bin/spark-submit
 
 #  Libraries to run operating system commands through Python.
 
