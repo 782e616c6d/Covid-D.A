@@ -120,11 +120,21 @@ spark = SparkSession.builder.master("local").appName("Etl.py").getOrCreate()
 path = "Processing/2020_BR_Region_Mobility_Report.csv"
 
 df = pd.read_csv(path, index_col=0, on_bad_lines='skip')
-df = df.drop(columns=["sub_region_1", "sub_region_2", "metro_area", "iso_3166_2_code", "census_fips_code"], axis=1)
+df = df.drop(columns=[
+    "sub_region_1", "sub_region_2", "metro_area", "iso_3166_2_code",
+    "census_fips_code"
+],
+             axis=1)
 
-df.columns = ["Code", "Id", "Date", "Retail_and_Recreation", "Grocery_and_Pharmacy", "Parks", "Transit_Stations", "Workplaces", "Residential"]
+df.columns = [
+    "Code", "Id", "Date", "Retail_and_Recreation", "Grocery_and_Pharmacy",
+    "Parks", "Transit_Stations", "Workplaces", "Residential"
+]
 
-df = df.to_csv("Processing/Mobility_Report.csv", header=True, index=False, index_label = False)
+df = df.to_csv("Processing/Mobility_Report.csv",
+               header=True,
+               index=False,
+               index_label=False)
 
 print(
     "Google Community Mobility Reports has been processed, and saved in the directory Processing."
@@ -148,8 +158,7 @@ df1 = df1.to_csv("Processing/Cases.csv",
                  index_label=False)
 
 print(
-    "Cases Reports has been processed, and saved in the directory Processing."
-)
+    "Cases Reports has been processed, and saved in the directory Processing.")
 
 # Processing: Deaths Reports.
 
