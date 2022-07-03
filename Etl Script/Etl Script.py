@@ -119,26 +119,13 @@ spark = SparkSession.builder.master("local").appName("Etl.py").getOrCreate()
 
 path = "Processing/2020_BR_Region_Mobility_Report.csv"
 
-df = spark.read.csv(path, inferSchema=True, header=True)
-df = df.drop("sub_region_1", "sub_region_2", "iso_3166_2_code",
-             "census_fips_code", "place_id")
-df = df.selectExpr(
-    "country_region_code as Code",
-    "country_region as Country",
-    "date as Date",
-    "retail_and_recreation_percent_change_from_baseline as Retail_and_Recreation",
-    "grocery_and_pharmacy_percent_change_from_baseline as Grocery_and_Pharmacy",
-    "parks_percent_change_from_baseline as Parks",
-    "transit_stations_percent_change_from_baseline as Transit_Stations",
-    "workplaces_percent_change_from_baseline as Workplaces",
-    "residential_percent_change_from_baseline as Residential",
-)
+df = pd.read_csv(path, index_col=0, on_bad_lines='skip')
+df = df.drop(columns=["sub_region_1", "sub_region_2", "metro_area", "iso_3166_2_code", "census_fips_code"], axis=1)
 
-# Exporting .csv.
+df.columns = ["Code", "Id", "Date", "Retail_and_Recreation", "Grocery_and_Pharmacy", "Parks", "Transit_Stations", "Workplaces", "Residential"]
 
-df = df.write.option(
-    "header",
-    True).mode('overwrite').csv("Processing/Mobility_Report.csv")
+
+df = df.to_csv("Processing/Mobility_Report.csv", header=True, index=False, index_label = False)
 
 print(
     "Google Community Mobility Reports has been processed, and saved in the directory Processing."
