@@ -124,7 +124,6 @@ df = df.drop(columns=["sub_region_1", "sub_region_2", "metro_area", "iso_3166_2_
 
 df.columns = ["Code", "Id", "Date", "Retail_and_Recreation", "Grocery_and_Pharmacy", "Parks", "Transit_Stations", "Workplaces", "Residential"]
 
-
 df = df.to_csv("Processing/Mobility_Report.csv", header=True, index=False, index_label = False)
 
 print(
