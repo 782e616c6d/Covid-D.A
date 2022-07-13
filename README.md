@@ -43,7 +43,7 @@ However, it can be easily extrapolated, due to constant data updates.
 
 Data display and analysis: Data Studio.
 
-Link: "Coming Soon".
+Link: https://datastudio.google.com/reporting/a55071c6-62c4-4bd9-860d-08cb4a4116d8
 
 
  ![images-removebg-preview](https://user-images.githubusercontent.com/76137086/174942117-e71f2707-54ac-4c9d-996d-7fddb1b1f1c4.png)
